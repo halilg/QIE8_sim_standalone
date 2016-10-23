@@ -3,7 +3,7 @@
 #include <cassert>
 #include <algorithm>
 #include <numeric>
-#include <cmath>
+
 
 #include "CmdLine.hh"
 
@@ -19,6 +19,8 @@
 #include "TMultiGraph.h"
 #include "TAxis.h"
 #include "TGraph.h"
+
+void I_in(float [], float [], double);
 
 #define N_TIME_SLICES 10
 
@@ -53,6 +55,7 @@ static void print_usage(const char* progname)
 
 int main(int argc, char *argv[])
 {
+
     // Simulation time step (in ns)
     const double dt = 0.5;
 
@@ -149,12 +152,13 @@ int main(int argc, char *argv[])
     // Exponential input pulse starting at t = 0
     float pulseData[QIE8Simulator::maxlen];
     float timeData[QIE8Simulator::maxlen];
-    for (unsigned i=0; i<QIE8Simulator::maxlen; ++i)
-    {
-        const double t = i*dt;
-        pulseData[i] = exp(-t/tDecay)/tDecay;
-        timeData[i]=t;
-    }
+    I_in(pulseData, timeData,tDecay);
+    //for (unsigned i=0; i<QIE8Simulator::maxlen; ++i)
+    //{
+        //const double t = i*dt;
+        //pulseData[i] = exp(-t/tDecay)/tDecay;
+        //timeData[i]=t;
+    //}
 
     // Plot the pulseData[i]
     TCanvas *c1 = new TCanvas("c1","multigraph",700,500);

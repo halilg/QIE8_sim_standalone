@@ -5,7 +5,7 @@ endif
 PROGRAMS = exampleSimulation.cc plot_pulse.cc
 
 OFILES = ConstantStepOdeSolver.o LowPassFilterTiming.o PadeTableODE.o \
-         QIE8Simulator.o ThirdOrderDelayODE.o
+         QIE8Simulator.o ThirdOrderDelayODE.o I_in.o
 
 OPTIMIZE = -std=c++11 -g
 INCLUDES = -I. -I$(ROOTSYS)/include
