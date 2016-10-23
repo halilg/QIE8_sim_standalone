@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     mg->Add(gr1);
     mg->Draw("al");
     mg->GetXaxis()->SetTitle("t (ns)"); 
-    mg->GetYaxis()->SetTitle("Current Amplitude"); 
+    mg->GetYaxis()->SetTitle("I_{in}"); 
     c1->Print("pulse.png");
     //
     
