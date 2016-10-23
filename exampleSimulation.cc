@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <cassert>
 #include <algorithm>
+#include <numeric>
 #include <cmath>
 
 #include "CmdLine.hh"
