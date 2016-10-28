@@ -12,7 +12,7 @@ void pulse(float pulseData[], float timeData[], double tDecay){
     pulseData[1]=(exp(-1/tDecay)/tDecay ) / 2;  // linear increase in the first 1 ns
     timeData[0]=0;
     timeData[1]=dt;
-    for (unsigned i=2; i<QIE8Simulator::maxlen -2 ; ++i)
+    for (unsigned i=2; i<QIE8Simulator::maxlen ; ++i)
     {
         const double t = i*dt;
         pulseData[i] = exp(-(t-1)/tDecay)/tDecay;
