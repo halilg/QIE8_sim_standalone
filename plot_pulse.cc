@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <cassert>
 #include <algorithm>
@@ -150,6 +151,19 @@ int main(int argc, char *argv[])
     // Exponential input pulse starting at t = 0
     float pulseData[QIE8Simulator::maxlen];
     float timeData[QIE8Simulator::maxlen];
+    
+    
+    int i = 0;
+    ifstream myfile;
+    myfile.open ("pulse.txt");
+    while(!myfile.eof())
+    {
+        myfile >> timeData[i] >> pulseData[i];
+        cout << timeData[i] << " " << pulseData[i] << endl;
+        ++i;
+    }
+    myfile.close();
+    
     //pulse(pulseData, timeData,tDecay); !!!!
     //for (unsigned i=0; i<QIE8Simulator::maxlen; ++i)
     //{
