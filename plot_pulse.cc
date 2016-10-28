@@ -20,8 +20,6 @@
 #include "TAxis.h"
 #include "TGraph.h"
 
-void pulse(float [], float [], double);
-
 #define N_TIME_SLICES 10
 
 // Define or undefine the following.
@@ -152,7 +150,7 @@ int main(int argc, char *argv[])
     // Exponential input pulse starting at t = 0
     float pulseData[QIE8Simulator::maxlen];
     float timeData[QIE8Simulator::maxlen];
-    pulse(pulseData, timeData,tDecay);
+    //pulse(pulseData, timeData,tDecay); !!!!
     //for (unsigned i=0; i<QIE8Simulator::maxlen; ++i)
     //{
         //const double t = i*dt;

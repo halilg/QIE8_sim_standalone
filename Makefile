@@ -2,10 +2,10 @@ ifndef ROOTSYS
 $(warning *** ROOT environment not set)
 endif
 
-PROGRAMS = exampleSimulation.cc plot_pulse.cc
+PROGRAMS = exampleSimulation.cc plot_pulse.cc pulse.cc
 
 OFILES = ConstantStepOdeSolver.o LowPassFilterTiming.o PadeTableODE.o \
-         QIE8Simulator.o ThirdOrderDelayODE.o pulse.o
+         QIE8Simulator.o ThirdOrderDelayODE.o 
 
 OPTIMIZE = -std=c++11 -g
 INCLUDES = -I. -I$(ROOTSYS)/include
