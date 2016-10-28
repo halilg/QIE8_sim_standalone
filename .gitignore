@@ -45,6 +45,7 @@ MC
 results
 
 #other
+*.txt
 *.json
 *.root
 *.pdf
