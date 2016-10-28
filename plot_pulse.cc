@@ -20,7 +20,7 @@
 #include "TAxis.h"
 #include "TGraph.h"
 
-void I_in(float [], float [], double);
+void pulse(float [], float [], double);
 
 #define N_TIME_SLICES 10
 
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     // Exponential input pulse starting at t = 0
     float pulseData[QIE8Simulator::maxlen];
     float timeData[QIE8Simulator::maxlen];
-    I_in(pulseData, timeData,tDecay);
+    pulse(pulseData, timeData,tDecay);
     //for (unsigned i=0; i<QIE8Simulator::maxlen; ++i)
     //{
         //const double t = i*dt;
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     mg->Add(gr1);
     mg->Draw("al");
     mg->GetXaxis()->SetTitle("t (ns)"); 
-    mg->GetYaxis()->SetTitle("I_{in}"); 
+    mg->GetYaxis()->SetTitle("Pulse"); 
     c1->Print("pulse.png");
     //
     

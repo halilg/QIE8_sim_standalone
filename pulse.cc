@@ -1,7 +1,7 @@
 #include <cmath>
 #include "QIE8Simulator.h"    
     
-void I_in(float pulseData[], float timeData[], double tDecay){    
+void pulse(float pulseData[], float timeData[], double tDecay){    
     // Simulation time step (in ns)
     const double dt = 0.5;
     
