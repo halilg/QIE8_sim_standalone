@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
     try {
         cmdline.optend();
 
-        if (cmdline.argc() == 1 || cmdline.argc() > 2)
+        if (cmdline.argc() == 0 || cmdline.argc() > 2)
             throw CmdLineError("wrong number of command line arguments");
         if (cmdline.argc() == 1) cmdline >> tDecay;
         else if (cmdline.argc() == 2) cmdline >> tDecay >> ofname;
