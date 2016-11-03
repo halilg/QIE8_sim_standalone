@@ -20,6 +20,7 @@
 #include "TMultiGraph.h"
 #include "TAxis.h"
 #include "TGraph.h"
+#include "TLegend.h"
 
 #define N_TIME_SLICES 10
 
@@ -153,13 +154,14 @@ int main(int argc, char *argv[])
     float timeData[QIE8Simulator::maxlen];
     
     
+    // read pulse data
     int i = 0;
     ifstream myfile;
     myfile.open ("pulse.txt");
     while(!myfile.eof())
     {
         myfile >> timeData[i] >> pulseData[i];
-        cout << timeData[i] << " " << pulseData[i] << endl;
+        //cout << timeData[i] << " " << pulseData[i] << endl;
         ++i;
     }
     myfile.close();
@@ -176,15 +178,30 @@ int main(int argc, char *argv[])
     TCanvas *c1 = new TCanvas("c1","multigraph",700,500);
     c1->SetGrid();
     TMultiGraph *mg = new TMultiGraph();
-    TGraph *gr1 = new TGraph(QIE8Simulator::maxlen/10,timeData,pulseData);
-    gr1->SetMarkerColor(kBlue);
-    gr1->SetMarkerStyle(21);
+    TGraph *gr0 = new TGraph("ref_pulse_norm.txt");
+    TGraph *gr1 = new TGraph(QIE8Simulator::maxlen,timeData,pulseData);
+    gr1->SetLineColor(kGray);
+    gr1->SetLineColor(kBlue);
+    //gr1->SetMarkerStyle(21);
     //gr1->Fit("pol6","q");
+    
+    mg->Add(gr0);
     mg->Add(gr1);
+    
     mg->Draw("al");
     mg->GetXaxis()->SetTitle("t (ns)"); 
-    mg->GetYaxis()->SetTitle("Pulse"); 
+    mg->GetYaxis()->SetTitle("Pulse Current (Arbitrary units)");
+    gPad->Modified();
+    mg->GetXaxis()->SetLimits(-5.,150.);
+    
+    TLegend * leg = new TLegend(0.62,0.79,0.89,0.89); //coordinates are fractions of pad dimensions
+    leg->AddEntry(gr1,"Simulated pulse","l"); 
+    leg->AddEntry(gr0,"Reference pulse","l"); 
+    //leg->SetHeader("HPD Pulse");
+    leg->Draw();    
+    
     c1->Print("pulse.png");
+    return 0;
     //
     
     
