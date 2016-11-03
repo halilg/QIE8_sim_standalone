@@ -46,9 +46,9 @@ static void print_usage(const char* progname)
          << "This program runs one exponential input pulse through the QIE8 chip\n"
          << "simulation and prints obtained ADC counts to the standard output.\n"
          << "Command line arguments are as follows:\n\n"
-         << "  charge   is the input pulse charge in fC\n\n"
-         << "  tStart   is the time at which the pulse starts in ns\n\n"
-         << "  tDecay   is the decay time of the exponential in ns\n"
+         << "  charge   is the input pulse charge in fC (eg 20 fC)\n\n"
+         << "  tStart   is the time at which the pulse starts in ns (eg 100 ns)\n\n"
+         << "  tDecay   is the decay time of the exponential in ns (eg 40 ns)\n"
          << endl;
 }
 
