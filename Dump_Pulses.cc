@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
     //dump output pulse
     ofname = "pulse_preamp.txt";
     myfile.open (ofname);
-    for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
+    for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
         const double time=i*dt;
         myfile << time << " " << sim.preampOutput(i*dt) << std::endl;
     }
