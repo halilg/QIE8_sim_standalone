@@ -165,14 +165,15 @@ int main(int argc, char *argv[])
             myfile_i >> temp >> pulseData[i];
             bool is50ns=int(temp * 4) % 2 == 0;
             if (!is50ns) continue; // skip multiples of 0.25 ns
-            cout << temp << " " << pulseData[i] << endl;
             ++i;
+            if (i>QIE8Simulator::maxlen) break;
         }
         myfile_i.close();
         cout << "Read input pulse from: " << "ref_pulse_norm.txt" << endl
              << "Setting Q to " << charge << endl;
         
     }else{
+        // Use pulse model
         // write input pulse model
         ofname = "pulse.txt";
         PulseModel(pulseData, tDecay, dt);
@@ -204,7 +205,7 @@ int main(int argc, char *argv[])
     //dump output pulse
     ofname = "pulse_preamp.txt";
     myfile.open (ofname);
-    for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
+    for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
         const double time=i*dt;
         myfile << time << " " << sim.preampOutput(i*dt) << std::endl;
     }
