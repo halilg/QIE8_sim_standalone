@@ -4,7 +4,7 @@
 #include "QIE8Simulator.h"    
 #include "CmdLine.hh"
 
-void pulse(float pulseData[], const double tDecay, const double dt){
+void PulseModel(float pulseData[], const double tDecay, const double dt){
     
     pulseData[0]=0;
     pulseData[1]=(exp(-1/tDecay)/tDecay ) / 2;  // linear increase in the first 1 ns

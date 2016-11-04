@@ -15,12 +15,7 @@
 #include "DoublePadeDelay.h"
 #include "PadeTableODE.h"
 #include "ThirdOrderDelayODE.h"
-
-#include "TCanvas.h"
-#include "TMultiGraph.h"
-#include "TAxis.h"
-#include "TGraph.h"
-#include "TLegend.h"
+#include "PulseModel.h"
 
 #define N_TIME_SLICES 10
 
@@ -107,7 +102,8 @@ int main(int argc, char *argv[])
                                        logA, logB, logC, logTau_1,
                                        ctlGainOut, inGainOut, outGainOut};
 #endif
-
+    string ofname;
+    
     // Parse the command line arguments
     CmdLine cmdline(argc, argv);
 
@@ -149,60 +145,17 @@ int main(int argc, char *argv[])
     // Set simulator parameters
     sim.setLeadingParameters(preampParameters, np);
 
-    // Exponential input pulse starting at t = 0
-    float pulseData[QIE8Simulator::maxlen];
-    float timeData[QIE8Simulator::maxlen];
-    
-    
-    // read pulse data
-    int i = 0;
-    ifstream myfile;
-    myfile.open ("pulse.txt");
-    while(!myfile.eof())
-    {
-        myfile >> timeData[i] >> pulseData[i];
-        //cout << timeData[i] << " " << pulseData[i] << endl;
-        ++i;
+    // write input pulse model
+    ofname = "pulse.txt";
+    float pulseData[QIE8Simulator::maxlen];        
+    PulseModel(pulseData, tDecay, dt);
+    ofstream myfile;
+    myfile.open (ofname);
+    for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
+        myfile << i*dt << " " << pulseData[i] << std::endl;
     }
     myfile.close();
-    
-    //pulse(pulseData, timeData,tDecay); !!!!
-    //for (unsigned i=0; i<QIE8Simulator::maxlen; ++i)
-    //{
-        //const double t = i*dt;
-        //pulseData[i] = exp(-t/tDecay)/tDecay;
-        //timeData[i]=t;
-    //}
-
-    // Plot the pulseData[i]
-    TCanvas *c1 = new TCanvas("c1","multigraph",700,500);
-    c1->SetGrid();
-    TMultiGraph *mg = new TMultiGraph();
-    TGraph *gr0 = new TGraph("ref_pulse_norm.txt");
-    TGraph *gr1 = new TGraph(QIE8Simulator::maxlen,timeData,pulseData);
-    gr1->SetLineColor(kGray);
-    gr1->SetLineColor(kBlue);
-    //gr1->SetMarkerStyle(21);
-    //gr1->Fit("pol6","q");
-    
-    mg->Add(gr0);
-    mg->Add(gr1);
-    
-    mg->Draw("al");
-    mg->GetXaxis()->SetTitle("t (ns)"); 
-    mg->GetYaxis()->SetTitle("Pulse Current (Arbitrary units)");
-    gPad->Modified();
-    mg->GetXaxis()->SetLimits(-5.,150.);
-    
-    TLegend * leg = new TLegend(0.62,0.79,0.89,0.89); //coordinates are fractions of pad dimensions
-    leg->AddEntry(gr1,"Simulated pulse","l"); 
-    leg->AddEntry(gr0,"Reference pulse","l"); 
-    //leg->SetHeader("HPD Pulse");
-    leg->Draw();    
-    
-    c1->Print("pulse.png");
-    return 0;
-    //
+    cout << "Wrote input pulse model: " << ofname << endl;
     
     
     // Corresponding object which knows how to interpolate
@@ -222,7 +175,20 @@ int main(int argc, char *argv[])
     const unsigned nTS = sim.run(dt, tstop, 0.0, ts, N_TIME_SLICES);
     assert(nTS == N_TIME_SLICES);
 
-    // Print obtained ADC counts
+    //dump output pulse
+    ofname = "pulse_preamp.txt";
+    myfile.open (ofname);
+    for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
+        const double time=i*dt;
+        cout << time << " " << sim.preampOutput(time) << std::endl;
+        myfile << time << " " << sim.preampOutput(time) << std::endl;
+    }
+    myfile.close();
+    cout << "Wrote preamp simulated pulse: " << ofname << endl;
+    
+    // Dump obtained ADC counts
+    ofname = "ADC_vs_TS.txt";
+    myfile.open (ofname);
     const double q = std::accumulate(ts+3, ts+8, 0.0);
     cout << endl << "TS3:7 Q = " << q << ", log10(Q) = " << log10(q) << '\n' << endl;
     
@@ -230,25 +196,11 @@ int main(int argc, char *argv[])
     {
         cout << "TS" << i << ": " << setw(12) << ts[i]
              << setw(13) << ts[i]/q << endl;
+        myfile << i << " " << setw(12) << ts[i] << " " << setw(13) << ts[i]/q << endl;
     }
+    myfile.close();
+    cout << "Wrote ADC values simulated pulse: " << ofname << endl;
     
-    
-    const double TSs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    
-    TGraph *gr2 = new TGraph(N_TIME_SLICES, TSs, ts);
-    c1->Clear();
-
-    gr2->SetTitle("");
-    gr2->GetXaxis()->SetTitle("TS"); 
-    gr2->GetYaxis()->SetTitle("Q");
-        gr2->SetFillColor(13);
-    gr2->Draw("AB");
-    c1->Print("adc.png");
-    
-    delete gr1;
-    delete gr2;
-    //delete mg;
-    delete c1;
     // We are done
     return 0;
 }
