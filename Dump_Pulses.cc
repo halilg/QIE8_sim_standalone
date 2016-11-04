@@ -43,9 +43,9 @@ static void print_usage(const char* progname)
          << "This program runs one exponential input pulse through the QIE8 chip\n"
          << "simulation and prints obtained ADC counts to the standard output.\n"
          << "Command line arguments are as follows:\n\n"
-         << "  charge   is the input pulse charge in fC (eg 20 fC). 0 uses reference input pulse\n\n"
+         << "  charge   is the input pulse charge in fC (eg 20 fC).\n\n"
          << "  tStart   is the time at which the pulse starts in ns (eg 100 ns)\n\n"
-         << "  tDecay   is the decay time of the exponential in ns (eg 40 ns)\n"
+         << "  tDecay   is the decay time of the exponential in ns (eg 40 ns, 0 uses reference input pulse)\n"
          << endl;
 }
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
                                        ctlGainOut, inGainOut, outGainOut};
 #endif
 
-    string ofname;
+    
     
     // Parse the command line arguments
     CmdLine cmdline(argc, argv);
@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
             throw CmdLineError("wrong number of command line arguments");
         cmdline >> charge >> tStart >> tDecay;
 
-        if (tDecay <= 0.0)
-            throw CmdLineError("Decay time argument must be positive");
+        //if (tDecay <= 0.0)
+            //throw CmdLineError("Decay time argument must be positive");
     }
     catch (CmdLineError& e) {
         cerr << "Error in " << cmdline.progname() << ": "
@@ -147,13 +147,14 @@ int main(int argc, char *argv[])
     // Set simulator parameters
     sim.setLeadingParameters(preampParameters, np);
     
-    ofstream myfile;
+    
+    string ofname;
     float pulseData[QIE8Simulator::maxlen];
     memset(pulseData, 0, QIE8Simulator::maxlen); // clear the memory
+    double integral=0;
 
-    if(charge == 0){
+    if(tDecay == 0){
         // Use the reference pulse for simulation
-        charge=1;
         // read pulse data
         unsigned int i = 0;
         float temp;
@@ -163,27 +164,35 @@ int main(int argc, char *argv[])
         while(!myfile_i.eof())
         {
             myfile_i >> temp >> pulseData[i];
+            
             bool is50ns=int(temp * 4) % 2 == 0;
             if (!is50ns) continue; // skip multiples of 0.25 ns
+            pulseData[i]=pulseData[i]*charge; // fix the normalization
+            integral=integral+pulseData[i]*dt;
             ++i;
-            if (i>QIE8Simulator::maxlen) break;
+            if (i==QIE8Simulator::maxlen) break; 
+            
+            
         }
         myfile_i.close();
-        cout << "Read input pulse from: " << "ref_pulse_norm.txt" << endl
-             << "Setting Q to " << charge << endl;
+        cout << "Read input pulse shape from " << "ref_pulse_norm.txt" << endl;
+        cout << "Integral=" << integral << endl;
         
     }else{
         // Use pulse model
-        // write input pulse model
-        ofname = "pulse.txt";
         PulseModel(pulseData, tDecay, dt);
-        myfile.open (ofname);
-        for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
-            myfile << i*dt << " " << pulseData[i] << std::endl;
-        }
-        myfile.close();
-        cout << "Wrote input pulse model: " << ofname << endl;
     }
+    
+    // write input pulse model
+    ofstream myfile;
+    ofname = "pulse.txt";
+    myfile.open (ofname);
+    for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
+        myfile << i*dt << " " << pulseData[i] << std::endl;
+    }
+    myfile.close();
+    cout << "Wrote input pulse model: " << ofname << endl;
+    
     
     // Corresponding object which knows how to interpolate
     // pulse shapes and which can be used by the simulator
@@ -204,18 +213,24 @@ int main(int argc, char *argv[])
 
     //dump output pulse
     ofname = "pulse_preamp.txt";
-    myfile.open (ofname);
+    ofstream preout;
+    preout.open("pulse_preamp.txt");
+    
+    integral=0;
     for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
         const double time=i*dt;
-        myfile << time << " " << sim.preampOutput(time) << std::endl;
+        preout << time << " " << sim.preampOutput(time) << std::endl;
+        integral=integral+sim.preampOutput(time)*dt;
     }
-
-    myfile.close();
+    
+    preout.close();
     cout << "Wrote preamp simulated pulse: " << ofname << endl;
+    cout << "integral=" << integral << endl;
     
     // Dump obtained ADC counts
     ofname = "ADC_vs_TS.txt";
-    myfile.open (ofname);
+    ofstream tsout;
+    tsout.open (ofname);
     const double q = std::accumulate(ts+3, ts+8, 0.0);
     cout << endl << "TS3:7 Q = " << q << ", log10(Q) = " << log10(q) << '\n' << endl;
     
@@ -223,9 +238,9 @@ int main(int argc, char *argv[])
     {
         cout << "TS" << i << ": " << setw(12) << ts[i]
              << setw(13) << ts[i]/q << endl;
-        myfile << i << " " << setw(12) << ts[i] << " " << setw(13) << ts[i]/q << endl;
+        tsout << i << " " << setw(12) << ts[i] << " " << setw(13) << ts[i]/q << endl;
     }
-    myfile.close();
+    tsout.close();
     cout << "Wrote ADC values simulated pulse: " << ofname << endl;
     
     // We are done
