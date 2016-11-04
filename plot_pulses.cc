@@ -11,11 +11,18 @@ int main()
     c1->SetGrid();
     TMultiGraph *mg = new TMultiGraph();
     TGraph *gr0 = new TGraph("ref_pulse_norm.txt");
+    gr0->SetLineColor(30);
+    gr0->SetLineWidth(2);
+
     TGraph *gr1 = new TGraph("pulse.txt");
+    gr1->SetLineColor(30);
+    gr1->SetLineWidth(2);
+
     TGraph *gr2 = new TGraph("pulse_preamp.txt");
-    gr0->SetLineColor(kGray);
-    gr1->SetLineColor(kOrange);
-    gr2->SetLineColor(kBlue);
+    gr2->SetLineColor(4);
+    gr2->SetLineWidth(2);
+    
+    
     //gr1->SetMarkerStyle(21);
     //gr1->Fit("pol6","q");
     
@@ -23,7 +30,7 @@ int main()
     //mg->Add(gr1);
     mg->Add(gr2);
     
-    mg->Draw("al");
+    mg->Draw("ac");
     mg->GetXaxis()->SetTitle("t (ns)"); 
     mg->GetYaxis()->SetTitle("Pulse Current (Arbitrary units)");
     gPad->Modified();
@@ -31,9 +38,10 @@ int main()
     mg->GetYaxis()->SetTitleOffset(1.3);
     
     TLegend * leg = new TLegend(0.62,0.79,0.89,0.89); //coordinates are fractions of pad dimensions
+    leg->AddEntry(gr0,"Reference pulse","l"); 
     leg->AddEntry(gr2,"Preamp simulated pulse","l"); 
     //leg->AddEntry(gr1,"Simulated pulse","l"); 
-    leg->AddEntry(gr0,"Reference pulse","l"); 
+    
     leg->Draw();    
     
     c1->Print("pulse.png");
