@@ -4,6 +4,7 @@
 #include <cassert>
 #include <algorithm>
 #include <numeric>
+#include <cstring>
 
 
 #include "CmdLine.hh"
@@ -147,7 +148,8 @@ int main(int argc, char *argv[])
 
     // write input pulse model
     ofname = "pulse.txt";
-    float pulseData[QIE8Simulator::maxlen];        
+    float pulseData[QIE8Simulator::maxlen];
+    memset(pulseData, 0, QIE8Simulator::maxlen); // clear the memory
     PulseModel(pulseData, tDecay, dt);
     ofstream myfile;
     myfile.open (ofname);
@@ -157,6 +159,24 @@ int main(int argc, char *argv[])
     myfile.close();
     cout << "Wrote input pulse model: " << ofname << endl;
     
+    // Use the reference pulse for simulation
+    bool inputpulseisref=true;
+    if(inputpulseisref){
+        // read pulse data
+        unsigned int i = 0;
+        float temp;
+        //memset(pulseData, 0, QIE8Simulator::maxlen); // clear the memory
+        ifstream myfile;
+        myfile.open ("ref_pulse_norm.txt");
+        while(!myfile.eof())
+        {
+            myfile >> temp >> pulseData[i];
+            bool is50ns=int(temp / 0.50) == temp / 0.50;
+            if (!is50ns) continue; // skip multiples of 0.25 ns
+            ++i;
+        }
+        myfile.close();
+    }
     
     // Corresponding object which knows how to interpolate
     // pulse shapes and which can be used by the simulator
@@ -178,13 +198,18 @@ int main(int argc, char *argv[])
     //dump output pulse
     ofname = "pulse_preamp.txt";
     myfile.open (ofname);
+    double norm=0;
+    for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
+        pulseData[i]=sim.preampOutput(i*dt);
+        norm += pulseData[i]*dt;
+    }
     for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
         const double time=i*dt;
-        cout << time << " " << sim.preampOutput(time) << std::endl;
-        myfile << time << " " << sim.preampOutput(time) << std::endl;
+        myfile << time << " " << sim.preampOutput(time)/norm << std::endl;
+        
     }
     myfile.close();
-    cout << "Wrote preamp simulated pulse: " << ofname << endl;
+    cout << "Wrote normalized preamp simulated pulse: " << ofname << endl;
     
     // Dump obtained ADC counts
     ofname = "ADC_vs_TS.txt";

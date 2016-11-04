@@ -20,7 +20,7 @@ int main()
     //gr1->Fit("pol6","q");
     
     mg->Add(gr0);
-    mg->Add(gr1);
+    //mg->Add(gr1);
     mg->Add(gr2);
     
     mg->Draw("al");
@@ -28,10 +28,11 @@ int main()
     mg->GetYaxis()->SetTitle("Pulse Current (Arbitrary units)");
     gPad->Modified();
     mg->GetXaxis()->SetLimits(-5.,150.);
+    mg->GetYaxis()->SetTitleOffset(1.3);
     
     TLegend * leg = new TLegend(0.62,0.79,0.89,0.89); //coordinates are fractions of pad dimensions
     leg->AddEntry(gr2,"Preamp simulated pulse","l"); 
-    leg->AddEntry(gr1,"Simulated pulse","l"); 
+    //leg->AddEntry(gr1,"Simulated pulse","l"); 
     leg->AddEntry(gr0,"Reference pulse","l"); 
     leg->Draw();    
     
