@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     myfile.open (ofname);
     for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
         const double time=i*dt;
-        myfile << time << " " << sim.preampOutput(i*dt) << std::endl;
+        myfile << time << " " << sim.preampOutput(time) << std::endl;
     }
 
     myfile.close();
