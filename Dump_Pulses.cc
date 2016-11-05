@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     const double dt = 0.5;
 
     // Simulation stop time (in ns)
-    const double tstop = 254.0;
+    const double tstop = QIE8Simulator::maxlen*dt;
 
     // Parameters of the preamp model. In principle, they can be
     // adjusted, but this has to be done in a coherent manner.
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
     preout.open("pulse_preamp.txt");
     
     integral=0;
-    for (unsigned int i=0; i<QIE8Simulator::maxlen/3; i++){
+    for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
         const double time=i*dt;
         preout << time << " " << sim.preampOutput(time) << std::endl;
         integral=integral+sim.preampOutput(time)*dt;
