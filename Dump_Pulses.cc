@@ -156,28 +156,8 @@ int main(int argc, char *argv[])
     if(tDecay == 0){
         // Use the reference pulse for simulation
         // read pulse data
-        unsigned int i = 0;
-        float temp;
-        //memset(pulseData, 0, QIE8Simulator::maxlen); // clear the memory
-        ifstream myfile_i;
-        myfile_i.open ("ref_pulse_norm.txt");
-        while(!myfile_i.eof())
-        {
-            myfile_i >> temp >> pulseData[i];
-            
-            bool is50ns=int(temp * 4) % 2 == 0;
-            if (!is50ns) continue; // skip multiples of 0.25 ns
-            pulseData[i]=pulseData[i]*charge; // fix the normalization
-            integral=integral+pulseData[i]*dt;
-            ++i;
-            if (i==QIE8Simulator::maxlen) break; 
-            
-            
-        }
-        myfile_i.close();
-        cout << "Read input pulse shape from " << "ref_pulse_norm.txt" << endl;
-        cout << "Integral=" << integral << endl;
-        
+        RefPulseModel(pulseData, dt, charge);
+        cout << "Read input pulse shape from " << "ref_pulse_norm.txt" << endl;        
     }else{
         // Use pulse model
         PulseModel(pulseData, tDecay, dt);

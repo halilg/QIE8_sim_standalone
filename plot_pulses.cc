@@ -11,7 +11,7 @@ int main()
     c1->SetGrid();
     TMultiGraph *mg = new TMultiGraph();
     //TGraph *gr0 = new TGraph("ref_pulse_norm.txt");
-    TGraph *gr0 = new TGraph("h_100_out.txt");
+    TGraph *gr0 = new TGraph("h_2_out.txt");
     gr0->SetLineColor(kOrange);
     gr0->SetLineWidth(2);
 
