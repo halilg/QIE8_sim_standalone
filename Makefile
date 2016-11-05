@@ -3,7 +3,7 @@ $(warning *** ROOT environment not set)
 endif
 
 PROGRAMS = exampleSimulation.cc Dump_Pulses.cc
-PROGRAMS_ROOT = plot_pulses.cc
+PROGRAMS_ROOT = plot_pulses.cc fit_pulse.cc
 
 OFILES = ConstantStepOdeSolver.o LowPassFilterTiming.o PadeTableODE.o \
          QIE8Simulator.o ThirdOrderDelayODE.o PulseModel.o
@@ -26,7 +26,7 @@ BINARIES_ROOT = $(PROGRAMS_ROOT:.cc=)
 all: $(BINARIES) $(BINARIES_ROOT)
 
 $(BINARIES): % : %.o $(OFILES); g++ $(LINKFLAGS) -o $@ $^ $(LIBS)
-$(BINARIES_ROOT): % : %.o; g++ $(LINKFLAGS) -o $@ $^ $(LIBS) $(LROOT)
+$(BINARIES_ROOT): % : %.o $(OFILES); g++ $(LINKFLAGS) -o $@ $^ $(LIBS) $(LROOT)
 
 
 clean:

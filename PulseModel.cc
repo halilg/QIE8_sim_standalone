@@ -4,6 +4,34 @@
 #include "QIE8Simulator.h"    
 #include "CmdLine.hh"
 
+double SciPMTPulseModel(const double tauSci, const double tauPMT, const double t){
+    if (tauSci == tauPMT){
+        return (1/(tauPMT*tauPMT))*t*exp(-t/tauSci);
+    }else{
+        return -(1/(tauPMT-tauSci))*(exp(-t/tauSci)-exp(-t/tauPMT));
+    }
+    
+}
+
+
+void SciPMTPulseModel(float pulseData[], const double tauSci, const double tauPMT, const double dt, const double charge=1.0){
+    
+    double integral=0;
+    for (unsigned i=2; i<QIE8Simulator::maxlen ; ++i)
+    {
+        const double t = i*dt;
+        pulseData[i]=SciPMTPulseModel(tauSci, tauPMT, t);
+        integral=integral+pulseData[i]*dt;
+    }
+    
+    // Normalize to charge fC
+    const double norm=charge/integral;
+    for (unsigned i=2; i<QIE8Simulator::maxlen ; ++i)
+    {
+        pulseData[i]=norm*pulseData[i];
+    }
+}
+
 void RefPulseModel(float pulseData[], const double dt, const double charge=1.0){
 
     if(dt!=0.50)throw "RefPulseModel work only for dt=0.50 ns";
