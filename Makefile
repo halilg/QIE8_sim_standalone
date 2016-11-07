@@ -2,8 +2,8 @@ ifndef ROOTSYS
 $(warning *** ROOT environment not set)
 endif
 
-PROGRAMS = exampleSimulation.cc Dump_Pulses.cc newpulse.cc
-PROGRAMS_ROOT = plot_pulses.cc fit_pulse.cc
+PROGRAMS = exampleSimulation.cc Dump_Pulses.cc 
+PROGRAMS_ROOT = plot_pulses.cc fit_pulse.cc newpulse.cc
 
 OFILES = ConstantStepOdeSolver.o LowPassFilterTiming.o PadeTableODE.o \
          QIE8Simulator.o ThirdOrderDelayODE.o PulseModel.o
