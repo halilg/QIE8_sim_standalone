@@ -71,7 +71,11 @@ void clsPulse::calcPulse(double *parm){
     }
     sciLight[1]=0;
     
-    for (unsigned int i=0; i<QIE8Simulator::maxlen; i++){
+    pulseData[0]=0;
+    double gain=1;
+    for (unsigned int i=1; i<QIE8Simulator::maxlen; i++){
+        double signal=gain*sciLight[i];
+        if (pulseData[i-1]<signal)
         pulseData[i]=sciLight[i];
     }
     
