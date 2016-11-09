@@ -6,7 +6,7 @@ PROGRAMS = exampleSimulation.cc Dump_Pulses.cc
 PROGRAMS_ROOT = plot_pulses.cc fit_pulse.cc newpulse.cc
 
 OFILES = ConstantStepOdeSolver.o LowPassFilterTiming.o PadeTableODE.o \
-         QIE8Simulator.o ThirdOrderDelayODE.o PulseModel.o 
+         QIE8Simulator.o ThirdOrderDelayODE.o PulseModel.o telegrapher.o
 
 OFILES_ROOT = grapher.o
 
