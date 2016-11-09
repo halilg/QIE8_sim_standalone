@@ -24,6 +24,7 @@ class hGraph {
    ~hGraph ();
    unsigned int lineColor;
    unsigned int lineWidth;
+   unsigned int lineStyle;
    std::string name;
    std::string fname;
    float xData[MAXLEN];

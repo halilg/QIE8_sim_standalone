@@ -27,6 +27,7 @@ void hGraph::init(){
     memset(yData, 0, sizeof(yData)); // clear the memory
     lineColor=1;
     lineWidth=1;
+    lineStyle=1;
 }
 
 hGraph::hGraph (const float dx, const float y[]) {
@@ -57,9 +58,15 @@ hGraph::~hGraph () {
 
 void hGrapher::add( const hGraph & graph){
     std::cout << "Adding: " << graph.fname.c_str() << std::endl;
-    gr = new TGraph(graph.fname.c_str());
+    if (graph.fname == ""){
+        gr = new TGraph(MAXLEN, graph.xData, graph.yData);
+    }else{
+        gr = new TGraph(graph.fname.c_str());
+    }
+    
     gr->SetLineColor(graph.lineColor);
     gr->SetLineWidth(graph.lineWidth);
+    gr->SetLineStyle(graph.lineStyle);
     mg.Add(gr);
 }
 
