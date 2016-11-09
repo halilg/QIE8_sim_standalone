@@ -19,8 +19,6 @@
     nmg.xAxisTitle="t (ns)";
     nmg.yAxisTitle="Pulse Current (Arbitrary units)";
     nmg.print("test.pdf");
-    
-    return 0;
 */
 
 void hGraph::init(){
