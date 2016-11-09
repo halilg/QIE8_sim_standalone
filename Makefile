@@ -6,7 +6,9 @@ PROGRAMS = exampleSimulation.cc Dump_Pulses.cc
 PROGRAMS_ROOT = plot_pulses.cc fit_pulse.cc newpulse.cc
 
 OFILES = ConstantStepOdeSolver.o LowPassFilterTiming.o PadeTableODE.o \
-         QIE8Simulator.o ThirdOrderDelayODE.o PulseModel.o
+         QIE8Simulator.o ThirdOrderDelayODE.o PulseModel.o 
+
+OFILES_ROOT = grapher.o
 
 OPTIMIZE = -std=c++11 -g
 INCLUDES = -I. -I$(ROOTSYS)/include
@@ -26,7 +28,7 @@ BINARIES_ROOT = $(PROGRAMS_ROOT:.cc=)
 all: $(BINARIES) $(BINARIES_ROOT)
 
 $(BINARIES): % : %.o $(OFILES); g++ $(LINKFLAGS) -o $@ $^ $(LIBS)
-$(BINARIES_ROOT): % : %.o $(OFILES); g++ $(LINKFLAGS) -o $@ $^ $(LIBS) $(LROOT)
+$(BINARIES_ROOT): % : %.o $(OFILES) $(OFILES_ROOT); g++ $(LINKFLAGS) -o $@ $^ $(LIBS) $(LROOT)
 
 
 clean:
