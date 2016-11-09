@@ -36,6 +36,8 @@ void hGraph::init(){
     fname="";
     memset(xData, 0, sizeof(xData)); // clear the memory
     memset(yData, 0, sizeof(yData)); // clear the memory
+    lineColor=1;
+    lineWidth=1;
 }
 
 hGraph::hGraph (const float dx, const float y[]) {
@@ -103,7 +105,8 @@ void hGrapher::print(const char * fname){
     mg.GetXaxis()->SetTitle(xAxisTitle.c_str()); 
     mg.GetYaxis()->SetTitle(yAxisTitle.c_str());
     gPad->Modified();
-    //if(xAxisLimits[0] !=0 && xAxisLimits[1] !=0) mg.GetXaxis()->SetLimits(xAxisLimits[0],xAxisLimits[1]);
+    if(xAxisLimits[0] !=0 && xAxisLimits[1] !=0) mg.GetXaxis()->SetLimits(xAxisLimits[0],xAxisLimits[1]);
+    c1.Update();
     c1.Print(fname);
 }
 
@@ -145,7 +148,9 @@ int main(){
     }
     
     hGraph gr1("pulse.txt");
-    //gr1.dump();
+    gr1.lineColor=kOrange;
+    gr1.lineWidth=2;
+    
     hGrapher nmg;
     nmg.add(gr1);
     nmg.xAxisLimits[0]=-5;
