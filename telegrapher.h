@@ -13,13 +13,13 @@ struct tLine // Data structure for transmission line
 };
 
 void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
-                 const float Vin, float & Vout,
+                 float & Vout,
                  const float dt,
                  const tLine & param);
 
 
 void telegrapher_dz(const float Iin[], float Iout[], const unsigned int asize,
-                 const float Vin, float & Vout,
+                 float & Vout,
                  const float dt,
                  const tLine & param);
 

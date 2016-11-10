@@ -22,7 +22,7 @@ int main(){
     
     RefPulseModel(pulse0, dt);
 
-    for (unsigned int i=0; i<QIE8Simulator::maxlen;i++){
+    for (unsigned int i=0; i<QIE8Simulator::maxlen;i++){ // set max signal to 1 uA
         pulse0[i]=pulse0[i]*3.03E-5;
     }
     
@@ -34,19 +34,19 @@ int main(){
 
     
     tLine myline;
-    float Vin=100.;  // Volt
+    //float Vin=100.;  // Volt
     float Vout=0.0;  // Volt
     myline.R=1.0E-3; // Ohm
     myline.L=0.5E-6; // Henry
     myline.G=0.0; //Ohm
     myline.C=1.0E-10; //Farad
-    myline.len=10.0; //m
-    myline.dz=myline.len/10; //m
+    myline.len=1.0; //m
+    myline.dz=myline.len; //m
         
-    telegrapher(pulse0, pulse1, QIE8Simulator::maxlen, Vin, Vout, dt, myline);
+    telegrapher(pulse0, pulse1, QIE8Simulator::maxlen, Vout, dt*1E-9, myline);
     dump_pulse(pulse1, QIE8Simulator::maxlen, dt, "test_telpulse.txt");
     
-    hGraph gr2(dt, pulse0);
+    hGraph gr2(dt, pulse1);
     gr2.lineColor=kGreen;
     gr2.lineWidth=2;
     gr2.lineStyle=2;
