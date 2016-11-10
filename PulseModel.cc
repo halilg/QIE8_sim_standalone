@@ -67,3 +67,56 @@ void PulseModel(float pulseData[], const double tDecay, const double dt){
     
 }
 
+// Scintillator model
+void SciModel(float pulseData[], const double tDecayF, const double tDecayS, const float ratio_fast, const double dt){
+    
+    float dLF;
+    float dLS;
+    pulseData[0]=0;
+    pulseData[1]=0.5;
+    pulseData[2]=1;
+    
+    for (unsigned int i=3; i<QIE8Simulator::maxlen; i++){
+        dLF=-(1/tDecayF)*ratio_fast*pulseData[i-1]*dt;
+        dLS=-(1/tDecayS)*(1-ratio_fast)*pulseData[i-1]*dt;
+        pulseData[i]=pulseData[i-1]+dLF+dLS;
+    }
+
+}
+
+
+// HPD model
+void HPDModel(const float pulseIn[], float pulseOut[], const double tDecay, const double dt){
+    
+    const int delay=8/dt; // turn on delay
+    //const int rise_time=1; // ns
+    const float uA_per_light=0.6;
+    //float targetI=;
+    std::cout << tDecay << std::endl;
+    float uA=0;
+    float dI;
+    for (unsigned int i=1; i<QIE8Simulator::maxlen-delay; i++){
+        //targetI=pulseIn[i]*uA_per_light;
+        //if (pulseOut[i+delay] < targetI) {
+            //pulseOut[i+delay]=uA_per_light*pulseIn[i];
+        //}else{
+//            
+        //}
+        uA=uA_per_light*pulseIn[i];
+        if (pulseOut[i+delay-1]<=uA){
+            //model rise
+            pulseOut[i+delay]=uA;
+        }else{
+            //model fall
+            dI=-(1/tDecay)*(pulseOut[i+delay-1]-uA)*dt;
+            pulseOut[i+delay]=pulseOut[i+delay-1]+dI;
+        }
+        
+        
+        
+        
+        //dL=-(1/tDecay)*pulseData[i-1]*dt;
+        //pulseData[i]=pulseData[i-1]+dL;
+    }
+
+}

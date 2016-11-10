@@ -71,7 +71,7 @@ void hGrapher::add( const hGraph & graph){
 }
 
 void hGrapher::print(const char * fname){
-    mg.Draw("ac");
+    mg.Draw("al");
     mg.GetXaxis()->SetTitle(xAxisTitle.c_str()); 
     mg.GetYaxis()->SetTitle(yAxisTitle.c_str());
     gPad->Modified();
