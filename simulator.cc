@@ -32,13 +32,24 @@ int main(){
     
     dump_pulse(pulse0, QIE8Simulator::maxlen, dt, "test_refpulse.txt");
 
+    
+    tLine myline;
     float Vin=100.;  // Volt
-    float R=1.0E-3; // Ohm
-    float L=0.1E-6; // Henry
-    float G=0.0; //Ohm
-    float C=10.0E-12; //Farad
-    float dz=1.0; //m
-    telegrapher(pulse0, pulse1, QIE8Simulator::maxlen, dt, Vin, R, L, G, C, dz);
+    float Vout=0.0;  // Volt
+    myline.R=1.0E-3; // Ohm
+    myline.L=0.1E-6; // Henry
+    myline.G=0.0; //Ohm
+    myline.C=10.0E-12; //Farad
+    myline.dz=1.0; //m
+    
+void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
+                 const float Vin, float & Vout,
+                 const float dt,
+                 const tLine & param);    
+    
+    
+    
+    telegrapher(pulse0, pulse1, QIE8Simulator::maxlen, Vin, Vout, dt, myline);
     dump_pulse(pulse1, QIE8Simulator::maxlen, dt, "test_telpulse.txt");
     
     hGraph gr2(dt, pulse0);

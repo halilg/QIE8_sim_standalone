@@ -1,26 +1,24 @@
 // Models RLC transmission line (Telegrapher's equations)
 #include <iostream>
+#include "telegrapher.h"
 
-void telegrapher(const float Iin[], float Iout[],
-                 const unsigned int asize, const float dt,
-                 const float Vin, const float R, const float L, const float G, const float C,
-                 const float dz) {
+void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
+                 const float Vin, float & Vout,
+                 const float dt,
+                 const tLine & param) {
 
-    float Vout, Vout_prev;
+    float Vout_prev;
     float Iin_dot, Vout_dot;
     
     Iout[0]=0;
-    Vout=0;
     Vout_prev=0;
-    
-    
     
     for (unsigned int i=1; i<asize; i++){
         Iin_dot=(Iin[i]-Iin[i-1])/dt;
-        Vout = Vin- R*dz*Iin[i] - L*dz* Iin_dot;
-        Vout_dot = (Vout - Vout_prev)/dt;
+        Vout = Vin - param.R * param.dz * Iin[i] - param.L * param.dz * Iin_dot;
+        Vout_dot = (Vout - Vout_prev) / dt;
         Vout_prev=Vout;
-        Iout[i] = Iin[i] - G*dz*Vout - C*dz*Vout_dot;
+        Iout[i] = Iin[i] - param.G * param.dz * Vout - param.C * param.dz * Vout_dot;
         //if (Iout[i]<0)Iout[i]=0;
         std::cout << Iout[i] << " " << Iin[i] << std::endl;
     }
