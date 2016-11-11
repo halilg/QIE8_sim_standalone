@@ -12,6 +12,19 @@ void dump_pulse(float pulse[], const unsigned int size, double dt, const char * 
     }
 }
 
+template <class T>
+void normalize_array(T pulse[], unsigned int size, float N=1){
+    T sum=0;
+    for (unsigned int i=0; i<size; i++){
+        sum+=pulse[i];
+    }
+    std::cout << "sum= " << sum << std::endl;
+    T C=N/sum;
+    for (unsigned int i=0; i<size; i++){
+        pulse[i]*=C;
+    }
+}
+
 int main(){
     const double dt = 0.5;
     float pulse0[QIE8Simulator::maxlen];
@@ -23,7 +36,8 @@ int main(){
     double tDecayF=2.5; //ns
     double tDecayS=20; //ns
     SciModel(pulse0, tDecayF, tDecayS, 0.5, dt);
-
+    normalize_array<float>(pulse0, QIE8Simulator::maxlen);
+    
     //for (unsigned int i=0; i<QIE8Simulator::maxlen;i++){ // set max signal to 1 uA
         //pulse0[i]=pulse0[i]*3.03E-5;
     //}
@@ -34,6 +48,7 @@ int main(){
     
     dump_pulse(pulse0, QIE8Simulator::maxlen, dt, "pulse_scintillator.txt");
     std::cout << "wrote pulse_scintillator.txt\n";
+    
     
     //tLine myline;
     //float Vout=0.0;  // Volt
@@ -48,6 +63,7 @@ int main(){
     //telegrapher(pulse0, pulse1, QIE8Simulator::maxlen, Vout, dt*1E-9, myline);
     double tDecay=14.8; //ns
     HPDModel(pulse0, pulse1, tDecay, dt);
+    normalize_array<float>(pulse1, QIE8Simulator::maxlen);
     dump_pulse(pulse1, QIE8Simulator::maxlen, dt, "pulse_hpd.txt");
     std::cout << "wrote pulse_hpd.txt\n";
     
@@ -62,6 +78,6 @@ int main(){
     nmg.xAxisLimits[0]=-5;
     nmg.xAxisLimits[1]=150;
     nmg.xAxisTitle="t (ns)";
-    nmg.yAxisTitle="Pulse Current";
+    nmg.yAxisTitle="Pulse (Arbitrary units)";
     nmg.print("pulse.pdf");
 }
