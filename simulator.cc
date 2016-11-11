@@ -18,7 +18,7 @@ void normalize_array(T pulse[], unsigned int size, float N=1){
     for (unsigned int i=0; i<size; i++){
         sum+=pulse[i];
     }
-    std::cout << "sum= " << sum << std::endl;
+    //std::cout << "sum= " << sum << std::endl;
     T C=N/sum;
     for (unsigned int i=0; i<size; i++){
         pulse[i]*=C;
@@ -32,10 +32,30 @@ int main(){
  
     memset(pulse0, 0, sizeof(pulse0)); // clear the memory
     memset(pulse1, 0, sizeof(pulse1)); // clear the memory
-    
-    double tDecayF=2.5; //ns
-    double tDecayS=20; //ns
-    SciModel(pulse0, tDecayF, tDecayS, 0.5, dt);
+
+
+
+    void SciModel(float pulseData[],
+              const double tDecayF, const double tDecayM, const double tDecayS,
+              const float wF, const float wM, const float wS,
+              const double dt);
+
+    //values from https://github.com/halilg/cmssw/blob/CMSSW_8_1_X/CalibCalorimetry/HcalAlgos/src/HcalPulseShapes.cc
+    //double tDecayF=8.0; //ns
+    //double tDecayM=15.0; //ns
+    //double tDecayS=25.0; //ns
+    //float wF=2.; //ns
+    //float wM=0.7; //ns
+    //float wS=0.5; //ns
+
+    double tDecayF=5.0; //ns
+    double tDecayM=50.0; //ns
+    double tDecayS=100.0; //ns
+    float wF=1.; //ns
+    float wM=1.; //ns
+    float wS=1.; //ns
+
+    SciModel(pulse0, tDecayF, tDecayM, tDecayS, wF, wM, wS, dt);
     normalize_array<float>(pulse0, QIE8Simulator::maxlen);
     
     //for (unsigned int i=0; i<QIE8Simulator::maxlen;i++){ // set max signal to 1 uA

@@ -68,18 +68,31 @@ void PulseModel(float pulseData[], const double tDecay, const double dt){
 }
 
 // Scintillator model
-void SciModel(float pulseData[], const double tDecayF, const double tDecayS, const float ratio_fast, const double dt){
-    
+void SciModel(float pulseData[],
+              const double tDecayF, const double tDecayM, const double tDecayS,
+              const float wF, const float wM, const float wS,
+              const double dt){
     float dLF;
+    float dLM;
     float dLS;
+    float cF=wF;
+    float cS=wS;
+    float cM=wM;
     pulseData[0]=0;
-    pulseData[1]=0.5;
-    pulseData[2]=1;
+    pulseData[2]=wF+wM+wS;
+    pulseData[1]=pulseData[2]/2;
+    
+    
+    
     
     for (unsigned int i=3; i<QIE8Simulator::maxlen; i++){
-        dLF=-(1/tDecayF)*ratio_fast*pulseData[i-1]*dt;
-        dLS=-(1/tDecayS)*(1-ratio_fast)*pulseData[i-1]*dt;
-        pulseData[i]=pulseData[i-1]+dLF+dLS;
+        dLF=-cF*(1/tDecayF)*dt;
+        dLM=-cM*(1/tDecayM)*dt;
+        dLS=-cS*(1/tDecayS)*dt;
+        cF+=dLF;
+        cM+=dLM;
+        cS+=dLS;
+        pulseData[i]=cF+cM+cS;
     }
 
 }
