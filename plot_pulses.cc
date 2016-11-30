@@ -75,8 +75,6 @@ static void plot_pulses_indv()
     nmg1.xAxisTitle="t (ns)";
     nmg1.yAxisTitle="Pulse (Arbitrary units)";
     nmg1.print("pulse_HPD.pdf");
-
-    
 }
 
 int main(int argc, char *argv[])
