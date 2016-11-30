@@ -23,8 +23,8 @@
 
 void hGraph::init(){
     fname="";
-    memset(xData, 0, sizeof(xData)); // clear the memory
-    memset(yData, 0, sizeof(yData)); // clear the memory
+    std::fill(std::begin(xData), std::end(xData), 0.); // clear the memory
+    std::fill(std::begin(yData), std::end(yData), 0.); // clear the memory
     lineColor=1;
     lineWidth=1;
     lineStyle=1;

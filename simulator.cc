@@ -10,8 +10,8 @@ int main(){
     float pulse0[QIE8Simulator::maxlen];
     float pulse1[QIE8Simulator::maxlen];
  
-    memset(pulse0, 0, sizeof(pulse0)); // clear the memory
-    memset(pulse1, 0, sizeof(pulse1)); // clear the memory
+    std::fill(std::begin(pulse0), std::end(pulse0), 0.); // clear the memory
+    std::fill(std::begin(pulse1), std::end(pulse1), 0.); // clear the memory
 
     //void SciModel(float pulseData[],
               //const double tDecayF, const double tDecayM, const double tDecayS,

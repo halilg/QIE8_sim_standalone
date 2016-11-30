@@ -45,9 +45,9 @@ static void plot_pulses_indv()
     float pulsec[QIE8Simulator::maxlen];
     //float time[QIE8Simulator::maxlen];
     
-    memset(pulse0, 0, sizeof(pulse0)); // clear the memory
-    memset(pulse1, 0, sizeof(pulse1)); // clear the memory
-    memset(pulsec, 0, sizeof(pulsec)); // clear the memory
+    std::fill(std::begin(pulse0), std::end(pulse0), 0.); // clear the memory
+    std::fill(std::begin(pulse1), std::end(pulse1), 0.); // clear the memory
+    std::fill(std::begin(pulsec), std::end(pulsec), 0.); // clear the memory
     //memset(time, 0, sizeof(time)); // clear the memory
     //values from https://github.com/halilg/cmssw/blob/CMSSW_8_1_X/CalibCalorimetry/HcalAlgos/src/HcalPulseShapes.cc
     double tDecayF=8.0; //ns
