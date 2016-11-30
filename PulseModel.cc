@@ -4,6 +4,13 @@
 #include "QIE8Simulator.h"    
 #include "CmdLine.hh"
 
+void dump_pulse(float pulse[], const unsigned int size, double dt, const char * fname){
+    std::ofstream myfile(fname);
+    for (unsigned int i=0;i<size; i++){
+        myfile << i*dt << " " << pulse[i] << std::endl;
+    }
+}
+
 double SciPMTPulseModel(const double tauSci, const double tauPMT, const double t){
     if (tauSci == tauPMT){
         return (1/(tauPMT*tauPMT))*t*exp(-t/tauSci);
