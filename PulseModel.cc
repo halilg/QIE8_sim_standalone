@@ -104,8 +104,13 @@ void HPDModel(const float pulseIn[], float pulseOut[], const double tDecay, cons
         //}
         uA=uA_per_light*pulseIn[i];
         if (pulseOut[i+delay-1]<=uA){
-            //model rise
             pulseOut[i+delay]=uA;
+            //model rise
+            //if (pulseOut[i+delay-1]==0)
+                //pulseOut[i+delay]=(uA/exp(-1))*exp(dt/rise_time);
+            //else
+                //pulseOut[i+delay]=pulseOut[i+delay]+pulseOut[i+delay-1]/rise_time;
+            //if (pulseOut[i+delay]>uA)pulseOut[i+delay]=uA;
         }else{
             //model fall
             dI=-(1/tDecay)*(pulseOut[i+delay-1]-uA)*dt;
