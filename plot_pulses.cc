@@ -23,14 +23,31 @@ static void print_usage(const char* progname)
          << endl;
 }
 
+static void convolute(const float f[], const float g[], float h[])
+{
+    int d;
+    for (unsigned n=0;n<QIE8Simulator::maxlen; n++){
+        h[n]=0;
+        for (unsigned m=0;m<QIE8Simulator::maxlen; m++){
+            d=n-m;
+            if (d<0) continue;
+            h[n] += f[m] * g[d];
+        }
+    }
+    
+}
 
 static void plot_pulses_indv()
 {
     const double dt = 0.5;
     float pulse0[QIE8Simulator::maxlen];
+    float pulse1[QIE8Simulator::maxlen];
+    float pulsec[QIE8Simulator::maxlen];
     //float time[QIE8Simulator::maxlen];
     
     memset(pulse0, 0, sizeof(pulse0)); // clear the memory
+    memset(pulse1, 0, sizeof(pulse1)); // clear the memory
+    memset(pulsec, 0, sizeof(pulsec)); // clear the memory
     //memset(time, 0, sizeof(time)); // clear the memory
     //values from https://github.com/halilg/cmssw/blob/CMSSW_8_1_X/CalibCalorimetry/HcalAlgos/src/HcalPulseShapes.cc
     double tDecayF=8.0; //ns
@@ -49,32 +66,39 @@ static void plot_pulses_indv()
 
     hGraph gr1(dt, pulse0);
     gr1.lineColor=kBlue;
-    gr1.lineWidth=2;
+    gr1.lineWidth=1;
 
     hGrapher nmg;
     nmg.add(gr1);
+    //nmg.xAxisLimits[0]=-5;
+    //nmg.xAxisLimits[1]=150;
+    //nmg.xAxisTitle="t (ns)";
+    //nmg.yAxisTitle="Pulse (Arbitrary units)";
+    //nmg.print("pulse_sci.pdf");
+    
+    
+    //memset(pulse1, 0, sizeof(pulse0)); // clear the memory
+    HPDModel(pulse1, 4.0, dt);
+    normalize_array<float>(pulse1, QIE8Simulator::maxlen);
+
+    hGraph gr2(dt, pulse1);
+    gr2.lineColor=kGreen+2;
+    //gr2.lineWidth=2;
+    
+    //hGrapher nmg1;
+    nmg.add(gr2);
+    convolute(pulse0, pulse1, pulsec);
+    normalize_array<float>(pulsec, QIE8Simulator::maxlen);
+    hGraph gr3(dt, pulsec);
+    gr3.lineColor=kRed;
+    gr3.lineWidth=2;
+    nmg.add(gr3);
+    
     nmg.xAxisLimits[0]=-5;
-    nmg.xAxisLimits[1]=150;
+    nmg.xAxisLimits[1]=60;
     nmg.xAxisTitle="t (ns)";
     nmg.yAxisTitle="Pulse (Arbitrary units)";
-    nmg.print("pulse_sci.pdf");
-    
-    
-    memset(pulse0, 0, sizeof(pulse0)); // clear the memory
-    HPDModel(pulse0, 4.0, dt);
-    normalize_array<float>(pulse0, QIE8Simulator::maxlen);
-
-    hGraph gr2(dt, pulse0);
-    gr2.lineColor=kBlue;
-    gr2.lineWidth=2;
-
-    hGrapher nmg1;
-    nmg1.add(gr2);
-    nmg1.xAxisLimits[0]=-5;
-    nmg1.xAxisLimits[1]=150;
-    nmg1.xAxisTitle="t (ns)";
-    nmg1.yAxisTitle="Pulse (Arbitrary units)";
-    nmg1.print("pulse_HPD.pdf");
+    nmg.print("pulses.pdf");
 }
 
 int main(int argc, char *argv[])

@@ -66,9 +66,10 @@ void PulseModel(float pulseData[], const double tDecay, const double dt){
     pulseData[0]=0;
     pulseData[1]=(exp(-1/tDecay)/tDecay ) / 2;  // linear increase in the first 1 ns
     
+    double t;
     for (unsigned i=2; i<QIE8Simulator::maxlen ; ++i)
     {
-        const double t = i*dt;
+         t = i*dt;
         pulseData[i] = exp(-(t-1)/tDecay)/tDecay;
     }
     
@@ -90,9 +91,6 @@ void SciModel(float pulseData[],
     pulseData[2]=wF+wM+wS;
     pulseData[1]=pulseData[2]/2;
     
-    
-    
-    
     for (unsigned int i=3; i<QIE8Simulator::maxlen; i++){
         dLF=-cF*(1/tDecayF)*dt;
         dLM=-cM*(1/tDecayM)*dt;
@@ -109,8 +107,19 @@ void SciModel(float pulseData[],
 // code and constant from https://github.com/halilg/cmssw/blob/CMSSW_8_1_X/CalibCalorimetry/HcalAlgos/src/HcalPulseShapes.cc
 void HPDModel(float pulse[], const double thpd, const double dt){
   // HPD starts at I and rises to 2I in thpd of time
-  for(unsigned j=0;j<thpd/dt && j<QIE8Simulator::maxlen;j++){
-    pulse[j] = 1.0 + ((double)j)/thpd;
+  unsigned j;
+  for(j=0;j<=thpd/dt;j++){
+    pulse[j] = 1.0 + ((double)j)*dt/thpd;
+    std::cout << pulse[j] << std::endl;
+  }
+  unsigned lastj=j;
+  double lastp=pulse[j-1];
+  double t;
+  double tauHPD=1.0;
+  
+  for(unsigned j=lastj;j<QIE8Simulator::maxlen;j++){
+    t=(j+1-lastj)*dt;
+    pulse[j]=lastp*exp(-t/tauHPD);
   }
 }
 
