@@ -50,13 +50,7 @@ static void plot_pulses_indv()
     hGraph gr1(dt, pulse0);
     gr1.lineColor=kBlue;
     gr1.lineWidth=2;
-    
-    //TCanvas c1("c1","Grapher",700,500);
-    //TGraph * gr = new TGraph(QIE8Simulator::maxlen, time, pulse0);
-    //gr1.lineColor=kBlue;
-    //gr1.lineWidth=2;
-    //gr->Draw("al");
-    //c1.Print("pulse_sci.pdf");
+
     hGrapher nmg;
     nmg.add(gr1);
     nmg.xAxisLimits[0]=-5;
@@ -64,6 +58,25 @@ static void plot_pulses_indv()
     nmg.xAxisTitle="t (ns)";
     nmg.yAxisTitle="Pulse (Arbitrary units)";
     nmg.print("pulse_sci.pdf");
+    
+    
+    memset(pulse0, 0, sizeof(pulse0)); // clear the memory
+    HPDModel(pulse0, 4.0, dt);
+    normalize_array<float>(pulse0, QIE8Simulator::maxlen);
+
+    hGraph gr2(dt, pulse0);
+    gr2.lineColor=kBlue;
+    gr2.lineWidth=2;
+
+    hGrapher nmg1;
+    nmg1.add(gr2);
+    nmg1.xAxisLimits[0]=-5;
+    nmg1.xAxisLimits[1]=150;
+    nmg1.xAxisTitle="t (ns)";
+    nmg1.yAxisTitle="Pulse (Arbitrary units)";
+    nmg1.print("pulse_HPD.pdf");
+
+    
 }
 
 int main(int argc, char *argv[])

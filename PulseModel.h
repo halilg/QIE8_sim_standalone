@@ -27,5 +27,6 @@ void SciModel(float pulseData[],
               const float wF, const float wM, const float wS,
               const double dt);
 void HPDModel(const float pulseIn[], float pulseOut[], const double tDecay, const double dt);
+void HPDModel(float pulse[], const double thpd, const double dt);
 
 #endif // CondFormats_HcalObjects_Pulse_Model_h_ 

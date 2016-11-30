@@ -75,6 +75,7 @@ void PulseModel(float pulseData[], const double tDecay, const double dt){
 }
 
 // Scintillator model
+// code from https://github.com/halilg/cmssw/blob/CMSSW_8_1_X/CalibCalorimetry/HcalAlgos/src/HcalPulseShapes.cc
 void SciModel(float pulseData[],
               const double tDecayF, const double tDecayM, const double tDecayS,
               const float wF, const float wM, const float wS,
@@ -104,6 +105,14 @@ void SciModel(float pulseData[],
 
 }
 
+// HPD Model
+// code and constant from https://github.com/halilg/cmssw/blob/CMSSW_8_1_X/CalibCalorimetry/HcalAlgos/src/HcalPulseShapes.cc
+void HPDModel(float pulse[], const double thpd, const double dt){
+  // HPD starts at I and rises to 2I in thpd of time
+  for(unsigned j=0;j<thpd/dt && j<QIE8Simulator::maxlen;j++){
+    pulse[j] = 1.0 + ((double)j)/thpd;
+  }
+}
 
 // HPD model
 void HPDModel(const float pulseIn[], float pulseOut[], const double tDecay, const double dt){
