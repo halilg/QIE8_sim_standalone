@@ -43,7 +43,7 @@ void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
     unsigned int i,j;
     
     for (i=0; i<asize; i++){
-        pulse[i]=Iin[i]*1E-6;
+        pulse[i]=Iin[i]*1E-6; // current in microamps
     }    
     
     for (i=0; i<ndz; i++){
