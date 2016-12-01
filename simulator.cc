@@ -33,7 +33,7 @@ int main(){
         //pulse0[i]=pulse0[i]*3.03E-5;
     //}
     
-    hGraph gr1(dt, pulse0);
+    hGraph gr1(dt, pulse0,"pulse0");
     gr1.lineColor=kBlue;
     gr1.lineWidth=2;
     
@@ -58,7 +58,7 @@ int main(){
     dump_pulse(pulse1, QIE8Simulator::maxlen, dt, "pulse_hpd.txt");
     std::cout << "wrote pulse_hpd.txt\n";
     
-    hGraph gr2(dt, pulse1);
+    hGraph gr2(dt, pulse1, "pulse1");
     gr2.lineColor=kRed;
     gr2.lineWidth=2;
     //gr2.lineStyle=2;

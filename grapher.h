@@ -17,15 +17,15 @@
 class hGraph {
     void init();
   public:
-    hGraph (const float x[], const float y[]);
-    hGraph (const float x, const float y[]);
-    hGraph (const char * fname);
+    hGraph (const float x[], const float y[], const char * gname = "");
+    hGraph (const float x, const float y[], const char * gname = "");
+    hGraph (const char * fname, const char * gname = "");
     void dump();
    ~hGraph ();
    unsigned int lineColor;
    unsigned int lineWidth;
    unsigned int lineStyle;
-   std::string name;
+   const char * name;
    std::string fname;
    float xData[MAXLEN];
    float yData[MAXLEN];
@@ -38,6 +38,7 @@ class hGrapher {
     TCanvas c1{"c1","Grapher",700,500};
     TMultiGraph mg{};
     TGraph * gr;
+    TLegend leg {0.62,0.74,0.89,0.89}; //coordinates are fractions of pad dimensions
     //std::string drawopt{"ac"};
   public:
     float xAxisLimits[2];

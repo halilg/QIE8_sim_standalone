@@ -65,12 +65,13 @@ static void plot_pulses_indv()
     SciModel(pulse0, tDecayF, tDecayM, tDecayS, wF, wM, wS, dt);
     normalize_array<float>(pulse0, QIE8Simulator::maxlen);
 
-    hGraph gr1(dt, pulse0);
+    hGraph gr1(dt, pulse0, "Scintillator");
     gr1.lineColor=kBlue;
     gr1.lineWidth=1;
 
     hGrapher nmg;
     nmg.add(gr1);
+    
     //nmg.xAxisLimits[0]=-5;
     //nmg.xAxisLimits[1]=150;
     //nmg.xAxisTitle="t (ns)";
@@ -81,19 +82,17 @@ static void plot_pulses_indv()
     HPDModel(pulse1, 4.0, dt);
     normalize_array<float>(pulse1, QIE8Simulator::maxlen);
 
-    hGraph gr2(dt, pulse1);
+    hGraph gr2(dt, pulse1, "HPD");
     gr2.lineColor=kGreen+2;
     //gr2.lineWidth=2;
-    
-    //hGrapher nmg1;
     nmg.add(gr2);
+    
     convolute(pulse0, pulse1, pulsec);
     normalize_array<float>(pulsec, QIE8Simulator::maxlen);
-    hGraph gr3(dt, pulsec);
+    hGraph gr3(dt, pulsec,"Scintillator * HPD");
     gr3.lineColor=kRed;
     gr3.lineWidth=2;
     nmg.add(gr3);
-
 
     tLine myline;
     float Vout=0.0;  // Volt
@@ -103,10 +102,11 @@ static void plot_pulses_indv()
     myline.C=1.0E-10; //Farad
     myline.len=0.15; //m
     myline.dz=myline.len; //m
+    
     telegrapher(pulsec, pulse0, QIE8Simulator::maxlen, Vout, dt*1E-9, myline);
     normalize_array<float>(pulse0, QIE8Simulator::maxlen);
 
-    hGraph gr4(dt, pulse0);
+    hGraph gr4(dt, pulse0,"After transmission line");
     gr4.lineColor=kRed+2;
     gr4.lineWidth=2;
     nmg.add(gr4);
