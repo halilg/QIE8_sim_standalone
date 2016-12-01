@@ -9,6 +9,7 @@
 #include "PulseModel.h"
 #include "QIE8Simulator.h"
 #include "grapher.h"
+#include "telegrapher.h"
 
 using namespace std;
 
@@ -77,7 +78,6 @@ static void plot_pulses_indv()
     //nmg.print("pulse_sci.pdf");
     
     
-    //memset(pulse1, 0, sizeof(pulse0)); // clear the memory
     HPDModel(pulse1, 4.0, dt);
     normalize_array<float>(pulse1, QIE8Simulator::maxlen);
 
@@ -93,7 +93,24 @@ static void plot_pulses_indv()
     gr3.lineColor=kRed;
     gr3.lineWidth=2;
     nmg.add(gr3);
-    
+
+
+    tLine myline;
+    float Vout=0.0;  // Volt
+    myline.R=1.0E-3; // Ohm
+    myline.L=0.5E-6; // Henry
+    myline.G=0.0; //Ohm
+    myline.C=1.0E-10; //Farad
+    myline.len=0.15; //m
+    myline.dz=myline.len; //m
+    telegrapher(pulsec, pulse0, QIE8Simulator::maxlen, Vout, dt*1E-9, myline);
+    normalize_array<float>(pulse0, QIE8Simulator::maxlen);
+
+    hGraph gr4(dt, pulse0);
+    gr4.lineColor=kRed+2;
+    gr4.lineWidth=2;
+    nmg.add(gr4);
+
     nmg.xAxisLimits[0]=-5;
     nmg.xAxisLimits[1]=60;
     nmg.xAxisTitle="t (ns)";

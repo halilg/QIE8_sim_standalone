@@ -110,7 +110,7 @@ void HPDModel(float pulse[], const double thpd, const double dt){
   unsigned j;
   for(j=0;j<=thpd/dt;j++){
     pulse[j] = 1.0 + ((double)j)*dt/thpd;
-    std::cout << pulse[j] << std::endl;
+    //std::cout << pulse[j] << std::endl;
   }
   unsigned lastj=j;
   double lastp=pulse[j-1];

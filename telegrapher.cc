@@ -22,7 +22,7 @@ void telegrapher_dz(const float Iin[], float Iout[], const unsigned int asize,
         Vin= Iin[i] * R;
         Vout = Vin - param.R * param.dz * Iin[i] - param.L * param.dz * Iin_dot;
         Vout_dot = (Vout - Vout_prev) / dt;
-        std::cout << "Iindot=" << Iin_dot << ", Vout=" << Vout << ", Voutdot=" << Vout_dot << std::endl;
+        //std::cout << "Iindot=" << Iin_dot << ", Vout=" << Vout << ", Voutdot=" << Vout_dot << std::endl;
         Vout_prev = Vout;
         Iout[i] = Iin[i] - param.G * param.dz * Vout - param.C * param.dz * Vout_dot;
         if (Iout[i]<0)Iout[i]=0;
