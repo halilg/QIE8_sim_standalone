@@ -12,7 +12,7 @@ void telegrapher_dz(const float Iin[], float Iout[], const unsigned int asize,
 
     float Vout_prev;
     float Iin_dot, Vout_dot;
-    const float R=6.0E6;
+    const float R=1.0E4;
     Iout[0]=0;
     Vout_prev=0;
     float Vin;
@@ -43,7 +43,7 @@ void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
     unsigned int i,j;
     
     for (i=0; i<asize; i++){
-        pulse[i]=Iin[i]*1E-6; // current in microamps
+        pulse[i]=Iin[i]*1E-6; // current in microamps // has no effect?
     }    
     
     for (i=0; i<ndz; i++){

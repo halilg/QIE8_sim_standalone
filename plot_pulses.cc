@@ -96,11 +96,11 @@ static void plot_pulses_indv()
 
     tLine myline;
     float Vout=0.0;  // Volt
-    myline.R=1.0E-3; // Ohm
-    myline.L=0.5E-6; // Henry
+    myline.R=1.0E-3; // Ohm // no effect alone
+    myline.L=1.0E-6; //0.5E-6; // Henry
     myline.G=0.0; //Ohm
-    myline.C=1.0E-10; //Farad
-    myline.len=0.15; //m
+    myline.C=1.0E-10;//1.0E-10; //Farad
+    myline.len=1.;//0.15; //m // has no effect as it is
     myline.dz=myline.len; //m
     
     telegrapher(pulsec, pulse0, QIE8Simulator::maxlen, Vout, dt*1E-9, myline);
@@ -115,7 +115,7 @@ static void plot_pulses_indv()
     nmg.xAxisLimits[1]=60;
     nmg.xAxisTitle="t (ns)";
     nmg.yAxisTitle="Pulse (Arbitrary units)";
-    nmg.print("pulses.pdf");
+    nmg.print("0pulses.pdf");
 }
 
 int main(int argc, char *argv[])
