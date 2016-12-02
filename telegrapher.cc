@@ -6,20 +6,19 @@
 
 
 void telegrapher_dz(const float Iin[], float Iout[], const unsigned int asize,
-                 float & Vout,
                  const float dt,
                  const tLine & param) {
 
-    float Vout_prev;
+    float Vout, Vout_prev;
     float Iin_dot, Vout_dot;
-    const float R=1.0E4;
+    const float R_in=1.0E4;
     Iout[0]=0;
     Vout_prev=0;
     float Vin;
     
     for (unsigned int i=1; i<asize; i++){
         Iin_dot = (Iin[i]-Iin[i-1])/dt;
-        Vin= Iin[i] * R;
+        Vin= Iin[i] * R_in;
         Vout = Vin - param.R * param.dz * Iin[i] - param.L * param.dz * Iin_dot;
         Vout_dot = (Vout - Vout_prev) / dt;
         //std::cout << "Iindot=" << Iin_dot << ", Vout=" << Vout << ", Voutdot=" << Vout_dot << std::endl;
@@ -32,12 +31,12 @@ void telegrapher_dz(const float Iin[], float Iout[], const unsigned int asize,
 }
 
 void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
-                 float & Vout,
                  const float dt,
                  const tLine & param) {
 
     const unsigned int ndz=int(param.len/param.dz);
-    float _Vout=Vout;
+    std::cout << ndz << std::endl;
+    //float _Vout=0;
     float pulse[asize];
 
     unsigned int i,j;
@@ -47,7 +46,7 @@ void telegrapher(const float Iin[], float Iout[], const unsigned int asize,
     }    
     
     for (i=0; i<ndz; i++){
-        telegrapher_dz(pulse, Iout, asize, _Vout, dt, param);
+        telegrapher_dz(pulse, Iout, asize, dt, param);
         for (j=0; j<asize; j++){
             pulse[j]=Iout[j];
         }

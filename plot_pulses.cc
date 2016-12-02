@@ -95,15 +95,16 @@ static void plot_pulses_indv()
     nmg.add(gr3);
 
     tLine myline;
-    float Vout=0.0;  // Volt
-    myline.R=1.0E-3; // Ohm // no effect alone
-    myline.L=1.0E-6; //0.5E-6; // Henry
-    myline.G=0.0; //Ohm
-    myline.C=1.0E-10;//1.0E-10; //Farad
+    float ndz=2;
+    //float Vout=0.0;  // Volt
+    myline.R=1.0E-3/ndz; // Ohm // no effect alone
+    myline.L=1.0E-6/ndz; //0.5E-6; // Henry
+    myline.G=0.0/ndz; //Ohm
+    myline.C=1.0E-10/ndz;//1.0E-10; //Farad
     myline.len=1.;//0.15; //m // has no effect as it is
-    myline.dz=myline.len; //m
+    myline.dz=myline.len/ndz; //m
     
-    telegrapher(pulsec, pulse0, QIE8Simulator::maxlen, Vout, dt*1E-9, myline);
+    telegrapher(pulsec, pulse0, QIE8Simulator::maxlen, dt*1E-9, myline);
     normalize_array<float>(pulse0, QIE8Simulator::maxlen);
 
     hGraph gr4(dt, pulse0,"After transmission line");
